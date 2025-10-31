@@ -1,0 +1,35 @@
+/* Botões gerais */
+button {
+    background-color: #0288d1; /* azul padrão */
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 14px;
+}
+
+/* Efeito hover */
+button:hover {
+    background-color: #026fa1; /* azul mais escuro ao passar o mouse */
+    transform: translateY(-2px); /* leve efeito de elevação */
+}
+
+/* Botões de formulário específicos */
+input[type="submit"] {
+    background-color: #0288d1;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+input[type="submit"]:hover {
+    background-color: #026fa1;
+    transform: translateY(-2px);
+}
