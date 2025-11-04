@@ -99,55 +99,77 @@ $pagina = $_GET["pagina"] ?? "home";
                 <?php
                 break;
             case "listarMoradores":
-               
-                // Listagem de boletos com opções de editar/deletar
-                include_once(__DIR__ . "/../controle/moradorControle/ListarMorador_class.php");
-                
-                $listarMoradorObj = new ListarMorador($_SESSION["id_sindico"]);
-                $moradores = $listarMoradorObj->getMoradores();
-                ?>
+    include_once(__DIR__ . "/../controle/moradorControle/ListarMorador_class.php");
 
-                    <h3><i class='fa-solid fa-users'></i> Moradores do Condomínio <?= htmlspecialchars($_SESSION['nome_condominio']) ?></h3>
+    $listarMoradorObj = new ListarMorador($_SESSION["id_sindico"]);
+    $moradores = $listarMoradorObj->getMoradores();
+    ?>
 
+    <h3><i class='fa-solid fa-users'></i> Moradores do Condomínio <?= htmlspecialchars($_SESSION['nome_condominio']) ?></h3>
 
-                       <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nome do Morador</th>
-                                    <th>Telefone</th>
-                                    <th>Nome de Usuário</th>
-                                    <th>Email</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($moradores as $m): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($m['id_morador']) ?></td>
-                                        <td><?= htmlspecialchars($m['nome_morador']) ?></td>
-                                        <td><?= htmlspecialchars($m['telefone']) ?></td>
-                                        <td><?= htmlspecialchars($m['nome_usuario']) ?></td>
-                                        <td><?= htmlspecialchars($m['email']) ?></td>
-                                        <td>
-                                            <!-- Editar -->
-                                            <a href="?pagina=editar_morador&id=<?= $m['id_morador'] ?>" style="color: #0288d1;">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </a>
-                                            &nbsp;
-                                            <!-- Excluir -->
-                                            <a href="../Morador.php?acao=excluir&id=<?= $m['id_morador'] ?>" 
-                                            onclick="return confirm('Tem certeza que deseja excluir este morador?');" 
-                                            style="color: #d32f2f;">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    <?php
-                break;
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome do Morador</th>
+                <th>Telefone</th>
+                <th>Nome de Usuário</th>
+                <th>Email</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($moradores as $m): ?>
+                <tr style="border-bottom:1px solid #ddd;">
+                    <td><?= htmlspecialchars($m['id_morador']) ?></td>
+                    <td><?= htmlspecialchars($m['nome_morador']) ?></td>
+                    <td><?= htmlspecialchars($m['telefone']) ?></td>
+                    <td><?= htmlspecialchars($m['nome_usuario']) ?></td>
+                    <td><?= htmlspecialchars($m['email']) ?></td>
+                    <td style="text-align:center;">
+                        <!-- Botão Editar (abre o modal) -->
+                        <button class="btn-editar"
+                            onclick="abrirModal(
+                                '<?= $m['id_morador'] ?>',
+                                '<?= htmlspecialchars($m['nome_morador']) ?>',
+                                '<?= htmlspecialchars($m['telefone']) ?>',
+                                '<?= htmlspecialchars($m['nome_usuario']) ?>',
+                                '<?= htmlspecialchars($m['email']) ?>'
+                            )"
+                            style="background-color:#0288d1; color:white; padding:6px 10px;
+                                   border-radius:5px; border:none; cursor:pointer; font-size:14px;">
+                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                        </button>
+
+                                                    <!-- Botão Excluir -->
+                            <button class="btn-excluir"
+                                onclick="abrirModalExcluir(
+                                    '<?= $m['id_morador'] ?>',
+                                    '<?= htmlspecialchars($m['nome_morador']) ?>'
+                                )"
+                                style="background-color:#d32f2f; color:white; padding:6px 10px;
+                                    border-radius:5px; border:none; cursor:pointer; font-size:14px;">
+                                <i class="fa-solid fa-trash"></i> Excluir
+                            </button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <!-- Inclui o modal de edição -->
+    <?php include(__DIR__ . "/../visao/form_modal_editar_morador.php"); ?>
+    <link rel="stylesheet" href="../visao/css/estilo_modal_editar_morador.css">
+    <script src="../visao/js/modalEditarMorador.js"></script>
+
+    <!-- Inclui o modal de exclusão -->
+    <?php include(__DIR__ . "/../visao/form_modal_excluir_morador.php"); ?>
+    <link rel="stylesheet" href="../visao/css/estilo_modal_excluir_morador.css">
+    <script src="../visao/js/modalExcluirMorador.js"></script>
+        
+    <?php
+    break;
+
 
             case "gerenciar_boletos":
                

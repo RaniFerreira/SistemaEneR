@@ -18,6 +18,20 @@ if (isset($_GET["fun"])) {
         $obj = new CadastrarMorador();
         $obj->cadastrar($_SESSION["id_sindico"]);
     }
+        // ação de atualizar morador
+    else if ($acao == "atualizarMorador") {
+        include_once(__DIR__ . "/controle/moradorControle/AtualizarMorador_class.php");
+        $obj = new AtualizarMorador();
+        $obj->atualizar($_GET["id"]);
+    }
+    else if ($acao == "excluirMorador") {
+    include_once(__DIR__ . "/controle/moradorControle/ExcluirMorador_class.php");
+    $obj = new ExcluirMorador();
+    if (isset($_GET["id"])) {
+        $obj->excluir($_GET["id"]);
+    }
+}
+
 
    
 

@@ -58,6 +58,39 @@ class MoradorDAO {
         }
     }
 
+    public function atualizar($morador) {
+    try {
+        $stmt = $this->con->prepare("
+            UPDATE morador
+            SET nome = :nome,
+                nome_condominio = :nome_condominio,
+                telefone = :telefone
+            WHERE id_morador = :id_morador
+        ");
+        $stmt->bindValue(":nome", $morador->getNome());
+        $stmt->bindValue(":nome_condominio", $morador->getNomeCondominio());
+        $stmt->bindValue(":telefone", $morador->getTelefone());
+        $stmt->bindValue(":id_morador", $morador->getIdMorador());
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Erro ao atualizar morador: " . $e->getMessage();
+    }
+}
+    public function excluirMorador($idMorador) {
+        try {
+            $stmt = $this->con->prepare("
+                DELETE FROM morador WHERE id_morador = :id_morador
+            ");
+            $stmt->bindValue(":id_morador", $idMorador, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Erro ao excluir morador: " . $e->getMessage();
+        }
+    }
+
+
+
+
 
 }
 ?>
