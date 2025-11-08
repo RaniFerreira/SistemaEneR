@@ -37,7 +37,8 @@ $pagina = $_GET["pagina"] ?? "home";
             <a href="?pagina=listarMoradores"><i class="fa-solid fa-user-plus"></i> Moradores</a>
             <a href="?pagina=gerenciar_boletos"><i class="fa-solid fa-file-invoice-dollar"></i> Gerenciar Boletos</a>
             <a href="?pagina=correcao"><i class="fa-solid fa-pen-to-square"></i> Solicitar Correção</a>
-            <a href="?pagina=reclamacoes"><i class="fa-solid fa-list-check"></i> Ouvidoria</a>
+            <a href="?pagina=reclamacoes"><i class="fa-solid fa-pen-to-square"></i> Reclamações</a>
+            <a href="?pagina=ouvidoria"><i class="fa-solid fa-list-check"></i> Ouvidoria</a>
         </div>
     </div>
 
@@ -178,30 +179,110 @@ $pagina = $_GET["pagina"] ?? "home";
 
             case "correcao":
               
-                // Formulário para correções
+                ?>
+                <h3><i class='fa-solid fa-pen-to-square'></i> Solicitar Correção</h3>
+                    <form action="../Reclamacao.php?acao=novaReclamacaoSindico" method="POST">
+                        
+                        <label>Título:</label>
+                        <input type="text" name="titulo" required>
+
+                        <label>Descrição:</label>
+                        <textarea name="descricao" rows="4" required></textarea>
+
+                        <button type="submit">
+                            <i class="fa-solid fa-paper-plane"></i> Enviar Solicitação
+                        </button>
+                    </form>
+
+                <?php
+                break;
+                case "reclamacoes":
+                
+                 include_once(__DIR__ . "/../controle/reclamacaoControle/ListarReclamacaoSindico_class.php");
+
+// Busca as reclamações internas do síndico
+$listar = new ListarReclamacaoSindico($_SESSION["id_sindico"]);
+$reclamacoes = $listar->getReclamacoes();
+?>
+
+<header>
+    <h2><i class="fa-solid fa-list-check"></i> Minhas Reclamações Internas</h2>
+</header>
+
+<div class="card">
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    <?php if (!empty($reclamacoes)): ?>
+        <?php foreach ($reclamacoes as $r): ?>
+            <tr>
+                <td><?= htmlspecialchars($r['id_reclamacao']) ?></td>
+                <td><?= htmlspecialchars($r['titulo']) ?></td>
+
+                <!-- Descrição truncada + tooltip -->
+                <td title="<?= htmlspecialchars($r['descricao']) ?>">
+                    <?php
+                        $desc = trim($r['descricao'] ?? '');
+                        if ($desc === '') echo "<i>—</i>";
+                        else {
+                            $max = 100;
+                            echo htmlspecialchars(mb_strlen($desc) > $max 
+                                ? mb_substr($desc, 0, $max) . '…'
+                                : $desc
+                            );
+                        }
+                    ?>
+                </td>
+
+                <td><?= htmlspecialchars($r['status_reclamacao']) ?></td>
+                <td><?= date("d/m/Y H:i", strtotime($r['data_reclamacao'])) ?></td>
+            </tr>
+        <?php endforeach; ?>
+
+    <?php else: ?>
+        <tr>
+            <td colspan="5" style="text-align:center;">Nenhuma reclamação interna encontrada.</td>
+        </tr>
+    <?php endif; ?>
+    </tbody>
+</table>
+</div>
+
+<?php
+
                 break;
 
-            case "reclamacoes":
+            case "ouvidoria":
                 
-                // Listagem completa com opções de atualizar/deletar
+                 header("Location: form_painel_ouvidoria.php");
+
                 break;
 
             default:
                ?>
-    <div style="text-align: center; margin-top: 100px;">
-        <h2 style="color: #0288d1; font-family: Arial, sans-serif;">
-            👋 Bem-vindo(a), <?= htmlspecialchars($_SESSION["nome_usuario"]) ?>!
-        </h2>
-        <p style="font-size: 18px; color: #555;">
-            Use o menu lateral para navegar pelas opções do sistema.
-        </p>
-        <div style="font-size: 50px; color: #0288d1; margin-top: 20px;">
-             ⬅️
-        </div>
-        <p style="color: #888; font-size: 14px;">
-            Clique em uma das opções ao lado.
-        </p>
-    </div>
+                <div style="text-align: center; margin-top: 100px;">
+                    <h2 style="color: #0288d1; font-family: Arial, sans-serif;">
+                        👋 Bem-vindo(a), <?= htmlspecialchars($_SESSION["nome_usuario"]) ?>!
+                    </h2>
+                    <p style="font-size: 18px; color: #555;">
+                        Use o menu lateral para navegar pelas opções do sistema.
+                    </p>
+                    <div style="font-size: 50px; color: #0288d1; margin-top: 20px;">
+                        ⬅️
+                    </div>
+                    <p style="color: #888; font-size: 14px;">
+                        Clique em uma das opções ao lado.
+                    </p>
+                </div>
     <?php
         }
         ?>

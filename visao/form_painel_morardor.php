@@ -158,7 +158,7 @@ break;
       case "correcao":
         ?>
             <h3><i class='fa-solid fa-pen-to-square'></i> Solicitar Correção</h3>
-            <form action='../Reclamacao.php?acao=novaReclamacao' method='POST'>
+            <form action='../Reclamacao.php?acao=novaReclamacaoMorador' method='POST'>
                 <label>Título:</label>
                 <input type='text' name='titulo' required>
                 

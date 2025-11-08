@@ -59,5 +59,89 @@ class ReclamacaoDao {
             return [];
         }
     }
+public function listarAguardandoPorSindico($idSindico) {
+    $sql = "
+        SELECT 
+            r.id_reclamacao,
+            r.titulo,
+            r.descricao,
+            r.status_reclamacao,
+            r.data_reclamacao,
+            m.nome AS nome_morador
+        FROM reclamacao r
+        LEFT JOIN morador m ON r.id_morador = m.id_morador
+        WHERE 
+            (
+                m.id_sindico = :idSindico     -- Reclamações dos moradores do síndico
+                OR r.id_sindico = :idSindico  -- Reclamações internas do síndico
+            )
+            AND r.status_reclamacao = 'Aguardando análise da Ouvidoria'
+        ORDER BY r.data_reclamacao DESC
+    ";
+
+    $stmt = $this->con->prepare($sql);
+    $stmt->bindParam(':idSindico', $idSindico, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function listarAprovadasPorSindico($idSindico) {
+    $sql = "
+        SELECT 
+            r.id_reclamacao,
+            r.titulo,
+            r.descricao,
+            r.status_reclamacao,
+            r.data_reclamacao,
+            m.nome AS nome_morador
+        FROM reclamacao r
+        LEFT JOIN morador m ON r.id_morador = m.id_morador
+        WHERE 
+            (
+                m.id_sindico = :idSindico
+                OR r.id_sindico = :idSindico
+            )
+            AND r.status_reclamacao = 'Ajuste Aprovado'
+        ORDER BY r.data_reclamacao DESC
+    ";
+
+    $stmt = $this->con->prepare($sql);
+    $stmt->bindParam(':idSindico', $idSindico, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function listarReprovadasPorSindico($idSindico) {
+    $sql = "
+        SELECT 
+            r.id_reclamacao,
+            r.titulo,
+            r.descricao,
+            r.status_reclamacao,
+            r.data_reclamacao,
+            m.nome AS nome_morador
+        FROM reclamacao r
+        LEFT JOIN morador m ON r.id_morador = m.id_morador
+        WHERE 
+            (
+                m.id_sindico = :idSindico
+                OR r.id_sindico = :idSindico
+            )
+            AND r.status_reclamacao = 'Ajuste Reprovado'
+        ORDER BY r.data_reclamacao DESC
+    ";
+
+    $stmt = $this->con->prepare($sql);
+    $stmt->bindParam(':idSindico', $idSindico, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+
+
 }
 ?>

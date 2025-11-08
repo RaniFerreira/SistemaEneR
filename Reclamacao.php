@@ -1,14 +1,28 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["id_morador"])) {
+// Se não for morador e nem síndico, bloqueia
+if (!isset($_SESSION["id_morador"]) && !isset($_SESSION["id_sindico"])) {
     header("Location: visao/index.php");
     exit;
 }
 
-if (isset($_GET["acao"]) && $_GET["acao"] === "novaReclamacao") {
+if (isset($_GET["acao"])) {
+
     include_once(__DIR__ . "/controle/reclamacaoControle/CadastrarReclamacao_class.php");
     $obj = new CadastrarReclamacao();
-    $obj->novaReclamacaoMorador($_SESSION["id_morador"]);
+
+    // ✅ AÇÃO: Morador enviando reclamação
+    if ($_GET["acao"] === "novaReclamacaoMorador" && isset($_SESSION["id_morador"])) {
+        $obj->novaReclamacaoMorador($_SESSION["id_morador"]);
+        exit;
+    }
+
+    // ✅ AÇÃO: Síndico enviando reclamação interna
+    if ($_GET["acao"] === "novaReclamacaoSindico" && isset($_SESSION["id_sindico"])) {
+        $obj->novaReclamacaoSindico($_SESSION["id_sindico"]);
+        exit;
+    }
 }
+
 ?>
