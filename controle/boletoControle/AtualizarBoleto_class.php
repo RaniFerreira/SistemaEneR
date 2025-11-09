@@ -1,7 +1,7 @@
 <?php
 include_once(__DIR__ . "/../../modelo/boletoModelo/BoletoDao_class.php");
 
-class CadastrarBoleto {
+class AtualizarBoleto {
 
     // Atualiza o status do boleto para "Aguardando Confirmação"
     public function pagarBoleto($idBoleto) {

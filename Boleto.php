@@ -1,31 +1,41 @@
 <?php
-session_start(); // inicia a sessão
+session_start();
 
-// Verifica se o morador está logado
-if (!isset($_SESSION["id_morador"])) {
+// ✅ BLOQUEIA visitantes
+if (!isset($_SESSION["id_morador"]) && !isset($_SESSION["id_sindico"])) {
     header("Location: visao/index.php");
     exit;
 }
 
-// Verifica se veio alguma ação pela URL
 if (isset($_GET["acao"])) {
 
     $acao = $_GET["acao"];
 
-    // 🔹 Ação de pagar boleto
-    if ($acao == "pagar") {
+    // ✅ AÇÃO DO MORADOR
+    if ($acao === "pagarMorador" && isset($_SESSION["id_morador"])) {
+
         include_once(__DIR__ . "/controle/boletoControle/AtualizarBoleto_class.php");
-        $obj = new CadastrarBoleto();
+        $obj = new AtualizarBoleto();
 
         if (isset($_GET["id_boleto"])) {
-            $idBoleto = $_GET["id_boleto"];
-            $obj->pagarBoleto($idBoleto);
+            $obj->pagarBoleto($_GET["id_boleto"]);
         }
 
-       
+        exit;
     }
 
-    
-    
+    // ✅ AÇÃO DO SÍNDICO
+    if ($acao === "pagarSindico" && isset($_SESSION["id_sindico"])) {
+
+        include_once(__DIR__ . "/controle/boletoControle/AtualizarBoletoSindico_class.php");
+        $obj = new AtualizarBoletoSindico();
+
+        if (isset($_GET["id_boleto"]) && isset($_GET["id_morador"])) {
+            $obj->confirmarPagamento($_GET["id_boleto"], $_GET["id_morador"]);
+        }
+
+        exit;
+    }
 }
+
 ?>

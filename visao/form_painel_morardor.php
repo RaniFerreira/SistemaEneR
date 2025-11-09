@@ -101,8 +101,10 @@ $pagina = $_GET["pagina"] ?? "home";
         
         <h3><i class='fa-solid fa-file-invoice-dollar'></i> Visualizar Boletos</h3>
         
-       <form class="form_visu_boleto";" id="formBoletos" method="GET" action="../Boleto.php?acao=pagar"  style="width: 100%; display: contents;">
-    <input type="hidden" name="acao" value="pagar">
+       <form class="form_visu_boleto" id="formBoletos" method="GET" action="../Boleto.php" style="width:100%; display:contents;">
+    
+    <input type="hidden" name="acao" value="pagarMorador">
+    <input type="hidden" id="id_boleto_input" name="id_boleto">
 
     <table>
         <thead>

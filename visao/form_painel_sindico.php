@@ -22,6 +22,7 @@ $pagina = $_GET["pagina"] ?? "home";
     <link rel="stylesheet" href="/sistemaEneR/visao/css/estilo_painel_sindico.css">
     <link rel="stylesheet" href="/sistemaEneR/visao/css/estilo_cadastro_morador.css">
     <script src="https://kit.fontawesome.com/a2e0e9a09f.js" crossorigin="anonymous"></script>
+    <script src="/sistemaEneR/visao/js/confirmacaoPagamento.js"></script>
 </head>
 <body>
 
@@ -35,6 +36,7 @@ $pagina = $_GET["pagina"] ?? "home";
         <div class="menu">
             <a href="?pagina=cadastrar_morador"><i class="fa-solid fa-user-plus"></i> Cadastrar Morador</a>
             <a href="?pagina=listarMoradores"><i class="fa-solid fa-user-plus"></i> Moradores</a>
+             <a href="?pagina=consumo"><i class="fa-solid fa-user-plus"></i> Gerenciar Consumos</a>
             <a href="?pagina=gerenciar_boletos"><i class="fa-solid fa-file-invoice-dollar"></i> Gerenciar Boletos</a>
             <a href="?pagina=correcao"><i class="fa-solid fa-pen-to-square"></i> Solicitar Correção</a>
             <a href="?pagina=reclamacoes"><i class="fa-solid fa-pen-to-square"></i> Reclamações</a>
@@ -174,7 +176,112 @@ $pagina = $_GET["pagina"] ?? "home";
 
             case "gerenciar_boletos":
                
-                // Listagem de boletos com opções de editar/deletar
+               include_once(__DIR__ . "/../controle/moradorControle/ListarMorador_class.php");
+    include_once(__DIR__ . "/../controle/boletoControle/ListarBoleto_class.php");
+
+    // ✅ PRIMEIRO PASSO — LISTAR MORADORES DO SÍNDICO
+    if (!isset($_GET["id_morador"])) {
+
+        $listarMoradorObj = new ListarMorador($_SESSION["id_sindico"]);
+        $moradores = $listarMoradorObj->getMoradores();
+        ?>
+
+        <h3><i class="fa-solid fa-users"></i> Selecione um Morador para Visualizar os Boletos</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Morador</th>
+                    <th>Telefone</th>
+                    <th>Ver Boletos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($moradores as $m): ?>
+                <tr>
+                    <td><?= $m['id_morador'] ?></td>
+                    <td><?= htmlspecialchars($m['nome_morador']) ?></td>
+                    <td><?= htmlspecialchars($m['telefone']) ?></td>
+                    <td>
+                        <a href="?pagina=gerenciar_boletos&id_morador=<?= $m['id_morador'] ?>"
+                           style="background:#0288d1;color:white;padding:5px 10px;border-radius:5px;text-decoration:none;">
+                           <i class="fa-solid fa-file-invoice-dollar"></i> Ver Boletos
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <?php
+        break;
+    }
+
+    // ✅ SEGUNDO PASSO — LISTAR BOLETOS DO MORADOR SELECIONADO
+    $idMorador = $_GET["id_morador"];
+    $listarBoletoObj = new ListarBoleto($idMorador);
+    $boletos = $listarBoletoObj->getBoletos();
+    ?>
+
+    <h3><i class="fa-solid fa-file-invoice-dollar"></i> Boletos do Morador #<?= $idMorador ?></h3>
+
+    <a href="?pagina=gerenciar_boletos" style="display:inline-block;margin-bottom:15px;color:#0288d1;">
+        ⬅️ Voltar para lista de moradores
+    </a>
+
+    <!-- ✅ FORMULÁRIO QUE O MODAL ENVIA AO CONFIRMAR -->
+    <form id="formBoletos" method="GET" action="../Boleto.php" style="width:100%;display:contents;">
+    
+    <input type="hidden" name="acao" value="pagarSindico">
+    <input type="hidden" id="id_boleto_input" name="id_boleto">
+    <input type="hidden" name="id_morador" value="<?= $idMorador ?>">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data Emissão</th>
+                    <th>Data Vencimento</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Confirmar</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php foreach ($boletos as $b): ?>
+                <tr>
+                    <td><?= $b['id_boleto'] ?></td>
+                    <td><?= date("d/m/Y", strtotime($b['data_emissao'])) ?></td>
+                    <td><?= date("d/m/Y", strtotime($b['data_vencimento'])) ?></td>
+                    <td><?= number_format($b['valor'], 2, ',', '.') ?></td>
+                    <td><?= htmlspecialchars($b['status_boleto']) ?></td>
+
+                    <td>
+                        <?php if (strtolower($b['status_boleto']) == 'aguardando confirmação'): ?>
+                            <input
+                                type="checkbox"
+                                value="<?= $b['id_boleto'] ?>"
+                                onchange="
+                                    document.getElementById('id_boleto_input').value = this.value;
+                                    confirmarPagamento(this);
+                                ">
+                        <?php else: ?>
+                            <input type="checkbox" disabled>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </form>
+
+<?php
+                break;
+             case "consumo":
+               
+                // Listagem 
                 break;
 
             case "correcao":
@@ -286,6 +393,17 @@ $reclamacoes = $listar->getReclamacoes();
     <?php
         }
         ?>
+    </div>
+</div>
+
+<!-- Modal de confirmação -->
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <p>⚠️ Tem certeza que deseja confirmar o pagamento deste boleto?<br>Após confirmar, não será possível reverter a ação.</p>
+        <div class="modal-buttons">
+            <button id="cancelBtn">Cancelar</button>
+            <button id="confirmBtn">Confirmar</button>
+        </div>
     </div>
 </div>
 
