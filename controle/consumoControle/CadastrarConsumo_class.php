@@ -5,32 +5,35 @@ include_once(__DIR__ . "/../boletoControle/CadastrarBoleto_class.php");
 
 class CadastrarConsumo {
 
-    public function novaLeitura($idMorador) {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+    public function novaLeitura($idMoradorParam = null) {
+        if (session_status() == PHP_SESSION_NONE) session_start();
 
-        $idMorador = $_SESSION["id_morador"];
+        $idMorador = $idMoradorParam ?? $_SESSION["id_morador"];
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            // Cria o objeto de consumo
+            if (!isset($_POST["kwh"]) || !is_numeric($_POST["kwh"]) || $_POST["kwh"] <= 0) {
+                die("Erro: Valor de kWh inválido!");
+            }
+
+            $kwh = floatval($_POST["kwh"]);
+
             $c = new Consumo();
             $c->setIdMorador($idMorador);
             $c->setDataLeitura(date("Y-m-d"));
-            $c->setKwh($_POST["kwh"]);
+            $c->setKwh($kwh);
 
             $dao = new ConsumoDao();
-            $sucesso = $dao->cadastrar($c);
+            $idConsumo = $dao->cadastrar($c);
 
-            // Se cadastrou o consumo, gera o boleto
-            if ($sucesso) {
-                $tarifa = 0.80; // exemplo de valor por kWh
-                $valor = $_POST["kwh"] * $tarifa;
+            if (!$idConsumo) die("Erro: Não foi possível cadastrar o consumo!");
 
-                $boletoCtrl = new CadastrarBoleto();
-                $boletoCtrl->gerarBoleto($idMorador, $valor);
-            }
+            $valor = $kwh * 0.80;
+
+            $boletoCtrl = new CadastrarBoleto();
+            $gerouBoleto = $boletoCtrl->gerarBoleto($idMorador, $valor, $idConsumo);
+
+            if (!$gerouBoleto) die("Erro: Não foi possível gerar o boleto!");
 
             header("Location: visao/form_painel_morardor.php?pagina=leitura");
             exit;

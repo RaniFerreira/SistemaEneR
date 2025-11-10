@@ -24,6 +24,8 @@ $pagina = $_GET["pagina"] ?? "home";
     <script src="https://kit.fontawesome.com/a2e0e9a09f.js" crossorigin="anonymous"></script>
     <script src="/sistemaEneR/visao/js/calculaConsumo.js"></script>
     <script src="/sistemaEneR/visao/js/confirmacaoPagamento.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 
     
 </head>
@@ -115,6 +117,7 @@ $pagina = $_GET["pagina"] ?? "home";
                 <th>Valor</th>
                 <th>Status</th>
                 <th>Pagar</th>
+                <th>Ver</th> 
             </tr>
         </thead>
         <tbody>
@@ -137,6 +140,15 @@ $pagina = $_GET["pagina"] ?? "home";
                             <input type="checkbox" disabled>
                         <?php endif; ?>
                     </td>
+                    <td style="text-align:center;">
+                        <i class="fa-solid fa-file-invoice-dollar"
+                        style="color: #0288d1; cursor: pointer;" 
+                            title="Ver Boleto"
+                            onclick="abrirModalBoleto(<?= $b['id_boleto'] ?>)">
+                        </i>
+                    </td>
+
+
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -150,6 +162,15 @@ function pagarBoleto(checkbox) {
     }
 }
 </script>
+
+<!-- Inclui o modal de boleto -->
+<?php include(__DIR__ . "/../visao/form_modal_boleto_informativo.php"); ?>
+
+<!-- Inclui o CSS do modal -->
+<link rel="stylesheet" href="../visao/css/estilo_modal_boleto_informativo.css">
+
+<!-- Inclui o JS do modal -->
+<script src="../visao/js/modalBoletoInformativo.js"></script>
 
 
 

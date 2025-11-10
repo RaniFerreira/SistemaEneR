@@ -1,8 +1,10 @@
 <?php
 
 class Boleto {
+
     private $id_boleto;
     private $id_morador;
+    private $id_consumo;     // ✅ NOVO
     private $data_emissao;
     private $data_vencimento;
     private $valor;
@@ -15,6 +17,10 @@ class Boleto {
 
     public function getIdMorador() {
         return $this->id_morador;
+    }
+
+    public function getIdConsumo() {      // ✅ NOVO
+        return $this->id_consumo;
     }
 
     public function getDataEmissao() {
@@ -40,6 +46,10 @@ class Boleto {
 
     public function setIdMorador($id_morador) {
         $this->id_morador = $id_morador;
+    }
+
+    public function setIdConsumo($id_consumo) {   // ✅ NOVO
+        $this->id_consumo = $id_consumo;
     }
 
     public function setDataEmissao($data_emissao) {

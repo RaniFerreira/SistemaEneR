@@ -15,7 +15,7 @@ include_once(__DIR__ . "/Consumo_class.php"); // se estiver na mesma pasta
 	}
 
 
-    public function cadastrar(Consumo $c) {
+   public function cadastrar(Consumo $c) {
         try {
             $sql = "INSERT INTO consumo (id_morador, data_leitura, kwh) 
                     VALUES (:id_morador, :data_leitura, :kwh)";
@@ -23,26 +23,70 @@ include_once(__DIR__ . "/Consumo_class.php"); // se estiver na mesma pasta
             $stmt->bindValue(":id_morador", $c->getIdMorador());
             $stmt->bindValue(":data_leitura", $c->getDataLeitura());
             $stmt->bindValue(":kwh", $c->getKwh());
-            return $stmt->execute();
+            $stmt->execute();
+
+            return $this->con->lastInsertId(); // Retorna o ID do consumo
         } catch (PDOException $e) {
-            error_log("Erro ao cadastrar leitura: ".$e->getMessage());
+            error_log("Erro ao cadastrar consumo: " . $e->getMessage());
             return false;
         }
     }
 
-	  // Lista todos os consumos de um morador
+	 // ✅ Listar consumos por morador
     public function listarPorMorador($idMorador) {
         try {
-            $sql = "SELECT * FROM consumo WHERE id_morador = :id_morador ORDER BY data_leitura DESC";
+            $sql = "SELECT * FROM consumo
+                    WHERE id_morador = :id
+                    ORDER BY data_leitura DESC";
+
             $stmt = $this->con->prepare($sql);
-            $stmt->bindValue(":id_morador", $idMorador);
+            $stmt->bindValue(":id", $idMorador);
             $stmt->execute();
+
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         } catch (PDOException $e) {
             error_log("Erro ao listar consumos: " . $e->getMessage());
             return [];
         }
     }
+
+   public function atualizarKwh($idConsumo, $kwh) {
+    try {
+        $sql = "UPDATE consumo SET kwh = :kwh WHERE id_consumo = :id";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bindValue(":kwh", $kwh);
+        $stmt->bindValue(":id", $idConsumo);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        error_log("Erro ao atualizar consumo: " . $e->getMessage());
+        return false;
+    }
+}
+public function excluirConsumo($idConsumo) {
+    try {
+        $sql = "DELETE FROM consumo WHERE id_consumo = :id_consumo";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bindValue(":id_consumo", (int)$idConsumo, PDO::PARAM_INT);
+        $resultado = $stmt->execute();
+        $stmt = null; // libera o statement
+        return $resultado;
+    } catch (PDOException $e) {
+        error_log("Erro ao excluir consumo: " . $e->getMessage());
+        return false;
+    }
+}
+
+public function buscarUltimoPorMorador($idMorador) {
+    $stmt = $this->con->prepare("SELECT * FROM consumo WHERE id_morador = ? ORDER BY data_leitura DESC LIMIT 1");
+    $stmt->execute([$idMorador]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
+
+
+
 }
 
 

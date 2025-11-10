@@ -23,6 +23,7 @@ $pagina = $_GET["pagina"] ?? "home";
     <link rel="stylesheet" href="/sistemaEneR/visao/css/estilo_cadastro_morador.css">
     <script src="https://kit.fontawesome.com/a2e0e9a09f.js" crossorigin="anonymous"></script>
     <script src="/sistemaEneR/visao/js/confirmacaoPagamento.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
@@ -280,9 +281,135 @@ $pagina = $_GET["pagina"] ?? "home";
 <?php
                 break;
              case "consumo":
-               
-                // Listagem 
-                break;
+
+    include_once(__DIR__ . "/../controle/moradorControle/ListarMorador_class.php");
+    include_once(__DIR__ . "/../controle/consumoControle/ListarConsumo_class.php");
+
+    // ✅ PRIMEIRO PASSO — LISTAR MORADORES
+    if (!isset($_GET["id_morador"])) {
+
+        $listarMoradorObj = new ListarMorador($_SESSION["id_sindico"]);
+        $moradores = $listarMoradorObj->getMoradores();
+        ?>
+
+        <h3><i class="fa-solid fa-bolt"></i> Selecione um Morador para Ver os Consumos</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Morador</th>
+                    <th>Telefone</th>
+                    <th>Ver Consumos</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php foreach ($moradores as $m): ?>
+                <tr>
+                    <td><?= $m['id_morador'] ?></td>
+                    <td><?= htmlspecialchars($m['nome_morador']) ?></td>
+                    <td><?= htmlspecialchars($m['telefone']) ?></td>
+
+                    <td>
+                        <a href="?pagina=consumo&id_morador=<?= $m['id_morador'] ?>"
+                           style="background:#0288d1;color:white;padding:6px 10px;
+                           border-radius:5px;text-decoration:none;">
+                           <i class="fa-solid fa-bolt"></i> Ver Consumos
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <?php
+        break;
+    }
+
+    // ✅ SEGUNDO PASSO — LISTAR CONSUMOS DO MORADOR
+    $idMorador = $_GET["id_morador"];
+
+    $listarConsumoObj = new ListarConsumo($idMorador);
+    $consumos = $listarConsumoObj->getConsumos();
+    ?>
+
+    <h3><i class="fa-solid fa-bolt"></i> Consumo do Morador #<?= $idMorador ?></h3>
+
+    <a href="?pagina=consumo" style="display:inline-block;margin-bottom:15px;color:#0288d1;">
+        ⬅️ Voltar para lista de moradores
+    </a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Data da Leitura</th>
+                <th>kWh Consumidos</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php if (!empty($consumos)): ?>
+                <?php foreach ($consumos as $c): ?>
+                <tr>
+                    <td><?= $c['id_consumo'] ?></td>
+                    <td><?= date("d/m/Y", strtotime($c['data_leitura'])) ?></td>
+                    <td><?= htmlspecialchars($c['kwh']) ?></td>
+
+                    <td style="text-align:center;">
+
+                        <!-- ✅ Botão Editar -->
+                        <button class="btn-editar"
+                            onclick="abrirModalEditarConsumo(
+                                '<?= $c['id_consumo'] ?>',
+                                '<?= $c['data_leitura'] ?>',
+                                '<?= $c['kwh'] ?>'
+                            )"
+                            style="background-color:#0288d1; color:white; padding:6px 10px;
+                                border-radius:5px; border:none; cursor:pointer; font-size:14px; margin-right:8px;">
+                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                        </button>
+
+                       <button class="btn-excluir"
+                            onclick="abrirModalExcluirConsumo(
+                                '<?= $c['id_consumo'] ?>',
+                                '<?= date('d/m/Y', strtotime($c['data_leitura'])) ?>'
+                            )"
+                            style="background-color:#d32f2f; color:white; padding:6px 10px;
+                                border-radius:5px; border:none; cursor:pointer; font-size:14px;">
+                            <i class="fa-solid fa-trash"></i> Excluir
+                        </button>
+
+
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+
+            <?php else: ?>
+                <tr>
+                    <td colspan="4" style="text-align:center;">Nenhum consumo registrado.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+            <!-- Inclui o modal de edição de consumo -->
+        <?php include(__DIR__ . "/../visao/form_modal_editar_consumo.php"); ?>
+        <link rel="stylesheet" href="../visao/css/estilo_modal_editar_consumo.css">
+        <script src="../visao/js/modalEditarConsumo.js"></script>
+
+
+        <!-- Inclui o modal de exclusão de consumo -->
+        <?php include(__DIR__ . "/../visao/form_modal_excluir_consumo.php"); ?>
+        <link rel="stylesheet" href="../visao/css/estilo_modal_excluir_consumo.css">
+        <script src="../visao/js/modalExcluirConsumo.js"></script>
+
+
+    <?php
+    break;
+
 
             case "correcao":
               

@@ -4,26 +4,32 @@ include_once(__DIR__ . "/../../modelo/boletoModelo/BoletoDao_class.php");
 
 class CadastrarBoleto {
 
-    public function gerarBoleto($idMorador, $valor) {
-        $b = new Boleto();
-        $b->setIdMorador($idMorador);
+    public function gerarBoleto($idMorador, $valor, $idConsumo) {
 
-        // Define timezone
+        $b = new Boleto();
+
+        // Armazena morador e consumo
+        $b->setIdMorador($idMorador);
+        $b->setIdConsumo($idConsumo);
+
+        // Timezone
         date_default_timezone_set('America/Sao_Paulo');
 
-        // Data de emissão = hoje
+        // Data emissão hoje
         $dataEmissao = new DateTime();
         $b->setDataEmissao($dataEmissao->format("Y-m-d"));
 
-        // Data de vencimento = 1 mês depois
-        $dataVencimento = (clone $dataEmissao)->modify("+1 month");
+        // Vencimento = 30 dias depois
+        $dataVencimento = (clone $dataEmissao)->modify("+30 days");
         $b->setDataVencimento($dataVencimento->format("Y-m-d"));
 
+        // Valor e status
         $b->setValor($valor);
         $b->setStatusBoleto("Pendente");
 
+        // DAO
         $dao = new BoletoDao();
-        return $dao->cadastrar($b);
+        return $dao->cadastrar($b); // retorna true ou false
     }
 }
 ?>

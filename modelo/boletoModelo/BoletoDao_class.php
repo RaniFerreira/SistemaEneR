@@ -10,20 +10,25 @@ class BoletoDao {
         $this->con = $conF->getConnection();
     }
 
-    // Cadastrar boleto (recebe um objeto)
-    public function cadastrar(Boleto $boleto) {
+     public function cadastrar(Boleto $boleto) {
         try {
-            $sql = "INSERT INTO boleto (id_morador, data_emissao, data_vencimento, valor, status_boleto)
-                    VALUES (:id_morador, :data_emissao, :data_vencimento, :valor, :status_boleto)";
-            
+            $sql = "INSERT INTO boleto 
+                    (id_morador, id_consumo, data_emissao, data_vencimento, valor, status_boleto)
+                    VALUES (:id_morador, :id_consumo, :data_emissao, :data_vencimento, :valor, :status_boleto)";
             $stmt = $this->con->prepare($sql);
             $stmt->bindValue(":id_morador", $boleto->getIdMorador());
+            $stmt->bindValue(":id_consumo", $boleto->getIdConsumo());
             $stmt->bindValue(":data_emissao", $boleto->getDataEmissao());
             $stmt->bindValue(":data_vencimento", $boleto->getDataVencimento());
             $stmt->bindValue(":valor", $boleto->getValor());
             $stmt->bindValue(":status_boleto", $boleto->getStatusBoleto());
-            
-            return $stmt->execute();
+
+            if ($stmt->execute()) {
+                return true; // sucesso
+            } else {
+                error_log("Erro ao cadastrar boleto: " . implode(", ", $stmt->errorInfo()));
+                return false;
+            }
         } catch (PDOException $e) {
             error_log("Erro ao cadastrar boleto: " . $e->getMessage());
             return false;
@@ -57,5 +62,44 @@ class BoletoDao {
             return false;
         }
     }
+public function atualizarValorPorConsumo($idConsumo, $novoValor) {
+        try {
+            $sql = "UPDATE boleto SET valor = :valor WHERE id_consumo = :id_consumo";
+
+            $stmt = $this->con->prepare($sql);
+            $stmt->bindValue(":valor", $novoValor);
+            $stmt->bindValue(":id_consumo", $idConsumo);
+
+            return $stmt->execute();
+
+        } catch (PDOException $e) {
+            error_log("Erro ao atualizar valor do boleto pelo consumo: " . $e->getMessage());
+            return false;
+        }
+    }
+
+public function excluirBoletoPorConsumo($idConsumo) {
+    try {
+        $sql = "DELETE FROM boleto WHERE id_consumo = :id_consumo";
+        $stmt = $this->con->prepare($sql);
+        $stmt->bindValue(":id_consumo", (int)$idConsumo, PDO::PARAM_INT);
+        $resultado = $stmt->execute();
+        $stmt = null; // libera o statement
+        return $resultado;
+    } catch (PDOException $e) {
+        error_log("Erro ao excluir boleto pelo consumo: " . $e->getMessage());
+        return false;
+    }
+}
+
+public function buscarPorId($id) {
+    $stmt = $this->con->prepare("SELECT * FROM boleto WHERE id_boleto = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
+
+
 }
 ?>

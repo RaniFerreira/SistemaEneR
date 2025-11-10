@@ -19,6 +19,7 @@ $pagina = $_GET["pagina"] ?? "home";
 
     <link rel="stylesheet" href="/sistemaEneR/visao/css/estilo_painel_sindico.css">
     <script src="https://kit.fontawesome.com/a2e0e9a09f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
