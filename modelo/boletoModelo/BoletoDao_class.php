@@ -98,7 +98,56 @@ public function buscarPorId($id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+public function buscarPorIdB($idBoleto) {
+    try {
+        $sql = "SELECT 
+                    b.id_boleto,
+                    b.id_morador,
+                    b.id_consumo,
+                    b.data_emissao,
+                    b.data_vencimento,
+                    b.valor,
+                    b.status_boleto
+                FROM boleto b
+                WHERE b.id_boleto = :id_boleto
+                LIMIT 1";
+        
+        $stmt = $this->con->prepare($sql);
+        $stmt->bindValue(":id_boleto", (int)$idBoleto, PDO::PARAM_INT);
+        $stmt->execute();
 
+        $boleto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$boleto) {
+            return null;
+        }
+
+        return $boleto;
+
+    } catch (PDOException $e) {
+        error_log("Erro em buscarPorIdB: " . $e->getMessage());
+        return null;
+    } catch (Exception $e) {
+        error_log("Erro inesperado em buscarPorIdB: " . $e->getMessage());
+        return null;
+    }
+}
+
+
+public function buscarBoletoComDetalhes($idBoleto) {
+        try {
+            $sql = "SELECT id_boleto, id_morador, id_consumo, data_emissao, data_vencimento, valor, status_boleto
+                    FROM boleto
+                    WHERE id_boleto = :id";
+            $stmt = $this->con->prepare($sql);
+            $stmt->bindValue(":id", $idBoleto, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar boleto: " . $e->getMessage());
+            return false;
+        }
+    }
 
 
 }

@@ -88,8 +88,28 @@ class MoradorDAO {
         }
     }
 
+    // Buscar todos os boletos de um morador
+    public function listarBoletosPorMorador($idMorador) {
+        $sql = "SELECT id_boleto, data_emissao, data_vencimento, valor, status_boleto 
+                FROM boletos 
+                WHERE id_morador = :id_morador 
+                ORDER BY data_vencimento DESC";
 
-    
+        $stmt = $this->con->prepare($sql);
+        $stmt->bindValue(':id_morador', $idMorador, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+   public function buscarPorIdM($idMorador) {
+    $sql = "SELECT nome AS morador_nome, nome_condominio AS morador_condominio
+            FROM morador
+            WHERE id_morador = ?";
+    $stmt = $this->con->prepare($sql);
+    $stmt->execute([$idMorador]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 
 

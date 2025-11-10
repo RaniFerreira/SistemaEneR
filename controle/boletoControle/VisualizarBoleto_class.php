@@ -1,7 +1,7 @@
 <?php
 include_once(__DIR__ . "/../../modelo/boletoModelo/BoletoDao_class.php");
-include_once(__DIR__ . "/../../modelo/consumoModelo/ConsumoDao_class.php");
 include_once(__DIR__ . "/../../modelo/moradorModelo/MoradorDao_class.php");
+include_once(__DIR__ . "/../../modelo/consumoModelo/ConsumoDao_class.php");
 
 class VisualizarBoleto {
     private $idBoleto;
@@ -11,24 +11,48 @@ class VisualizarBoleto {
     }
 
     public function getDadosCompleto() {
-        $boletoDao = new BoletoDao();
-        $consumoDao = new ConsumoDao();
-        $moradorDao = new MoradorDao();
+        try {
+            $boletoDao = new BoletoDao();
+            $boleto = $boletoDao->buscarPorId($this->idBoleto);
 
-        $boleto = $boletoDao->buscarPorId($this->idBoleto);
-        if (!$boleto) return null;
+            if (!$boleto) {
+                return null;
+            }
 
-        $morador = $moradorDao->buscarPorId($boleto['id_morador']);
-        $consumo = $consumoDao->buscarUltimoPorMorador($boleto['id_morador']);
+            // 🔹 Buscar dados do morador
+            $moradorDao = new MoradorDao();
+            $morador = $moradorDao->buscarPorIdM($boleto['id_morador']);
 
-        return [
-            'morador_nome' => $morador['nome'] ?? '—',
-            'morador_condominio' => $morador['nome_condominio'] ?? '—',
-            'data_emissao' => date("d/m/Y", strtotime($boleto['data_emissao'])),
-            'data_vencimento' => date("d/m/Y", strtotime($boleto['data_vencimento'])),
-            'valor' => number_format($boleto['valor'], 2, ',', '.'),
-            'status_boleto' => $boleto['status_boleto'],
-            'kwh' => $consumo['kwh'] ?? '—'
-        ];
+            // 🔹 Buscar dados de consumo (somente se existir)
+            $consumoDao = new ConsumoDao();
+            $consumo = null;
+            if (!empty($boleto['id_consumo'])) {
+                $consumo = $consumoDao->buscarPorId($boleto['id_consumo']);
+            }
+
+            // 🔹 Montar array final com todos os dados
+            $dadosCompletos = [
+                'id_boleto'          => $boleto['id_boleto'],
+                'data_emissao'       => $boleto['data_emissao'],
+                'data_vencimento'    => $boleto['data_vencimento'],
+                'valor'              => $boleto['valor'],
+                'status_boleto'      => $boleto['status_boleto'],
+                'id_morador'         => $boleto['id_morador'],
+                'id_consumo'         => $boleto['id_consumo'],
+                'morador_nome'       => $morador['morador_nome'] ?? '—',
+                'morador_condominio' => $morador['morador_condominio'] ?? '—',
+                'morador_apartamento'=> $morador['morador_apartamento'] ?? '—',
+                'consumo_kwh'        => $consumo['kwh'] ?? '—',
+                'consumo_mes'        => $consumo['mes_referencia'] ?? '—',
+                'consumo_valor'      => $consumo['valor'] ?? '—'
+            ];
+
+            return $dadosCompletos;
+
+        } catch (PDOException $e) {
+            error_log("Erro ao buscar dados completos do boleto: " . $e->getMessage());
+            return null;
+        }
     }
 }
+?>

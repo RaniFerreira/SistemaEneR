@@ -121,7 +121,21 @@ $pagina = $_GET["pagina"] ?? "home";
             </tr>
         </thead>
         <tbody>
+            <?php
+                if (session_status() == PHP_SESSION_NONE) {
+                    session_start();
+                }
+
+                include_once(__DIR__ . "/../controle/boletoControle/VisualizarBoleto_class.php");
+             
+                ?>
             <?php foreach ($boletos as $b): ?>
+                 <?php
+                            // 2️⃣ Busca os dados completos de cada boleto
+                            $visualizar = new VisualizarBoleto($b['id_boleto']);
+                            $dadosBoleto = $visualizar->getDadosCompleto();
+                    ?>
+                
                 <tr>
                     <td><?= htmlspecialchars($b['id_boleto']) ?></td>
                     <td><?= date("d/m/Y", strtotime($b['data_emissao'])) ?></td>
@@ -142,10 +156,15 @@ $pagina = $_GET["pagina"] ?? "home";
                     </td>
                     <td style="text-align:center;">
                         <i class="fa-solid fa-file-invoice-dollar"
-                        style="color: #0288d1; cursor: pointer;" 
-                            title="Ver Boleto"
-                            onclick="abrirModalBoleto(<?= $b['id_boleto'] ?>)">
-                        </i>
+               onclick="abrirModalBoleto(this)"
+               data-morador="<?= htmlspecialchars($dadosBoleto['morador_nome']) ?>"
+               data-condominio="<?= htmlspecialchars($dadosBoleto['morador_condominio']) ?>"
+               data-emissao="<?= date("d/m/Y", strtotime($dadosBoleto['data_emissao'])) ?>"
+               data-vencimento="<?= date("d/m/Y", strtotime($dadosBoleto['data_vencimento'])) ?>"
+               data-valor="<?= number_format($dadosBoleto['valor'], 2, ',', '.') ?>"
+               data-status="<?= htmlspecialchars($dadosBoleto['status_boleto']) ?>"
+               data-kwh="<?= htmlspecialchars($dadosBoleto['consumo_kwh']) ?>">
+            </i>
                     </td>
 
 

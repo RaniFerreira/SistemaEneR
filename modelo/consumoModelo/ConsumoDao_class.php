@@ -76,14 +76,12 @@ public function excluirConsumo($idConsumo) {
         return false;
     }
 }
-
-public function buscarUltimoPorMorador($idMorador) {
-    $stmt = $this->con->prepare("SELECT * FROM consumo WHERE id_morador = ? ORDER BY data_leitura DESC LIMIT 1");
-    $stmt->execute([$idMorador]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
-
+public function buscarPorId($idConsumo) {
+        $sql = "SELECT kwh FROM consumo WHERE id_consumo = ?";
+        $stmt = $this->con->prepare($sql);
+        $stmt->execute([$idConsumo]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
 
 

@@ -1,29 +1,15 @@
-// modalBoleto.js
+function abrirModalBoleto(element) {
+    document.getElementById('modalMorador').textContent = element.dataset.morador;
+    document.getElementById('modalCondominio').textContent = element.dataset.condominio;
+    document.getElementById('modalEmissao').textContent = element.dataset.emissao;
+    document.getElementById('modalVencimento').textContent = element.dataset.vencimento;
+    document.getElementById('modalValor').textContent = element.dataset.valor;
+    document.getElementById('modalStatus').textContent = element.dataset.status;
+    document.getElementById('modalKwh').textContent = element.dataset.kwh;
 
-// Abre o modal
-function abrirModalBoleto() {
-    const modal = document.getElementById('boletoModal');
-    if (modal) {
-        modal.style.display = 'flex';
-    }
+    document.getElementById('boletoModal').style.display = 'flex';
 }
 
-// Fecha o modal ao clicar no "X" ou fora da área do modal
-document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('boletoModal');
-    const closeBtn = modal ? modal.querySelector('#closeModal') : null;
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-            // Não mexe na URL, porque seu roteador precisa de ?pagina=boletos
-        });
-    }
-
-    // Fecha ao clicar fora do modal
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-});
+function fecharModal() {
+    document.getElementById('boletoModal').style.display = 'none';
+}
