@@ -181,12 +181,10 @@ function pagarBoleto(checkbox) {
     }
 }
 </script>
-
-<!-- Inclui o modal de boleto -->
-<?php include(__DIR__ . "/../visao/form_modal_boleto_informativo.php"); ?>
-
 <!-- Inclui o CSS do modal -->
 <link rel="stylesheet" href="../visao/css/estilo_modal_boleto_informativo.css">
+<!-- Inclui o modal de boleto -->
+<?php include(__DIR__ . "/../visao/form_modal_boleto_informativo.php"); ?>
 
 <!-- Inclui o JS do modal -->
 <script src="../visao/js/modalBoletoInformativo.js"></script>

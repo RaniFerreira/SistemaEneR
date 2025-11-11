@@ -118,7 +118,8 @@ $reclamacoes = $list->getReclamacoes();
                 <th>Morador</th>
                 <th>Status</th>
                 <th>Data</th>
-                <th>Descrição</th> <!-- nova coluna -->
+                <th>Descrição</th> 
+                <th>Ações</th>
             </tr>
         </thead>
 
@@ -156,6 +157,18 @@ $reclamacoes = $list->getReclamacoes();
                             }
                         }
                     ?>
+                </td>
+                <td>
+                    <button class="btn-editar" 
+                        onclick="abrirModalEditarReclamacao(
+                            '<?= $r['id_reclamacao'] ?>',
+                            '<?= htmlspecialchars(addslashes($r['titulo'])) ?>',
+                            '<?= htmlspecialchars(addslashes($r['descricao'])) ?>',
+                            '<?= $r['status_reclamacao'] ?>'
+                        )">
+                        
+                        <i class="fa-solid fa-pen-to-square"></i> Responder
+                    </button>
                 </td>
             </tr>
         <?php endforeach; endif; ?>

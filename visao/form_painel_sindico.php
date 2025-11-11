@@ -247,11 +247,20 @@ $pagina = $_GET["pagina"] ?? "home";
                     <th>Valor</th>
                     <th>Status</th>
                     <th>Confirmar</th>
+                     <th>Ver</th>
+                    
                 </tr>
             </thead>
+            
 
             <tbody>
                 <?php foreach ($boletos as $b): ?>
+                    <?php
+                    include_once(__DIR__ . "/../controle/boletoControle/VisualizarBoleto_class.php");
+
+                    $visualizar = new VisualizarBoleto($b['id_boleto']);
+                    $dadosBoleto = $visualizar->getDadosCompleto();
+                    ?>
                 <tr>
                     <td><?= $b['id_boleto'] ?></td>
                     <td><?= date("d/m/Y", strtotime($b['data_emissao'])) ?></td>
@@ -272,11 +281,29 @@ $pagina = $_GET["pagina"] ?? "home";
                             <input type="checkbox" disabled>
                         <?php endif; ?>
                     </td>
+                    <td style="text-align:center;">
+                        <i class="fa-solid fa-file-invoice-dollar"
+                            onclick="abrirModalBoleto(this)"
+                            data-morador="<?= htmlspecialchars($dadosBoleto['morador_nome']) ?>"
+                            data-condominio="<?= htmlspecialchars($dadosBoleto['morador_condominio']) ?>"
+                            data-emissao="<?= date("d/m/Y", strtotime($dadosBoleto['data_emissao'])) ?>"
+                            data-vencimento="<?= date("d/m/Y", strtotime($dadosBoleto['data_vencimento'])) ?>"
+                            data-valor="<?= number_format($dadosBoleto['valor'], 2, ',', '.') ?>"
+                            data-status="<?= htmlspecialchars($dadosBoleto['status_boleto']) ?>"
+                            data-kwh="<?= htmlspecialchars($dadosBoleto['consumo_kwh']) ?>">
+                        </i>
+                    </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </form>
+    <!-- Inclui o CSS do modal -->
+    <link rel="stylesheet" href="../visao/css/estilo_modal_boleto_informativo.css">
+    <!-- Inclui o modal de boleto -->
+    <?php include(__DIR__ . "/../visao/form_modal_boleto_informativo.php"); ?>
+    <!-- Inclui o JS do modal -->
+    <script src="../visao/js/modalBoletoInformativo.js"></script>
 
 <?php
                 break;
