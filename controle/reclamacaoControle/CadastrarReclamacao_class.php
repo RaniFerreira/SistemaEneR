@@ -20,6 +20,7 @@ class CadastrarReclamacao {
             $r->setIdSindico(null); // morador não tem síndico vinculado na reclamação
             $r->setTitulo($_POST["titulo"]);
             $r->setDescricao($_POST["descricao"]);
+            $r->setResposta("?"); // 👈 resposta inicial padrão
             $r->setDataReclamacao(date("Y-m-d H:i:s")); // data atual
             $r->setStatusReclamacao("Aguardando análise da Ouvidoria"); // status inicial
 
@@ -47,6 +48,7 @@ class CadastrarReclamacao {
             $r->setIdSindico($idSindico);
             $r->setTitulo($_POST["titulo"]);
             $r->setDescricao($_POST["descricao"]);
+            $r->setResposta("?"); // 👈 resposta inicial padrão
             $r->setDataReclamacao(date("Y-m-d"));
             $r->setStatusReclamacao("Aguardando análise da Ouvidoria");
 

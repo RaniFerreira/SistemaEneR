@@ -1,22 +1,23 @@
-const modal = document.getElementById('editarReclamacaoModal');
-
-function abrirModalEditarReclamacao(id, titulo, descricao, status) {
+// Função para abrir o modal com dados da reclamação
+function abrirModalReclamacao(id, titulo, descricao, resposta, status) {
     document.getElementById('id_reclamacao_modal').value = id;
     document.getElementById('titulo_modal').value = titulo;
     document.getElementById('descricao_modal').value = descricao;
+    document.getElementById('resposta_modal').value = resposta || '';
     document.getElementById('status_modal').value = status;
 
-    modal.style.display = 'flex';
+    document.getElementById('editarReclamacaoModal').style.display = 'flex';
 }
 
-// Fechar modal ao clicar em cancelar
-document.getElementById('cancelEditarReclamacao').onclick = function() {
-    modal.style.display = 'none';
-}
+// Fechar o modal
+document.getElementById('cancelEditarReclamacao').addEventListener('click', function() {
+    document.getElementById('editarReclamacaoModal').style.display = 'none';
+});
 
-// Fechar modal clicando fora
-window.onclick = function(event) {
-    if (event.target === modal) {
+// Fechar clicando fora do conteúdo
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById('editarReclamacaoModal');
+    if (e.target === modal) {
         modal.style.display = 'none';
     }
-}
+});

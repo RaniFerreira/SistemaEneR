@@ -478,6 +478,7 @@ $reclamacoes = $listar->getReclamacoes();
             <th>Título</th>
             <th>Descrição</th>
             <th>Status</th>
+            <th>Resposta</th>
             <th>Data</th>
         </tr>
     </thead>
@@ -505,6 +506,17 @@ $reclamacoes = $listar->getReclamacoes();
                 </td>
 
                 <td><?= htmlspecialchars($r['status_reclamacao']) ?></td>
+                 <!-- ✅ Exibe a resposta da ouvidoria -->
+                <td title="<?= htmlspecialchars($r['resposta'] ?? '—') ?>">
+                    <?php
+                        $resp = trim($r['resposta'] ?? '');
+                        echo $resp !== '' 
+                            ? htmlspecialchars(mb_strlen($resp) > 100 
+                                ? mb_substr($resp, 0, 100) . '…'
+                                : $resp)
+                            : '<i>Sem resposta</i>';
+                    ?>
+                </td>
                 <td><?= date("d/m/Y H:i", strtotime($r['data_reclamacao'])) ?></td>
             </tr>
         <?php endforeach; ?>

@@ -160,12 +160,13 @@ $reclamacoes = $list->getReclamacoes();
                 </td>
                 <td>
                     <button class="btn-editar" 
-                        onclick="abrirModalEditarReclamacao(
-                            '<?= $r['id_reclamacao'] ?>',
-                            '<?= htmlspecialchars(addslashes($r['titulo'])) ?>',
-                            '<?= htmlspecialchars(addslashes($r['descricao'])) ?>',
-                            '<?= $r['status_reclamacao'] ?>'
-                        )">
+                        onclick="abrirModalReclamacao(
+        '<?= $r['id_reclamacao'] ?>',
+        '<?= htmlspecialchars(addslashes($r['titulo'])) ?>',
+        '<?= htmlspecialchars(addslashes($r['descricao'])) ?>',
+        '<?= htmlspecialchars(addslashes($r['resposta'] ?? '')) ?>',
+        '<?= $r['status_reclamacao'] ?>'
+    )">
                         
                         <i class="fa-solid fa-pen-to-square"></i> Responder
                     </button>
@@ -175,6 +176,10 @@ $reclamacoes = $list->getReclamacoes();
         </tbody>
     </table>
 </div>
+    <!-- Inclui o modal de resposta de reclamação -->
+    <?php include(__DIR__ . "/../visao/form_modal_resposta_reclamacao.php"); ?>
+    <link rel="stylesheet" href="../visao/css/estilo_modal_resposta_reclamacao.css">
+    <script src="../visao/js/modalRespostaReclamacao.js"></script>
 
 
 <?php

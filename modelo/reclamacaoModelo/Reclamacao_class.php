@@ -5,6 +5,7 @@ class Reclamacao {
     private $id_sindico;
     private $titulo;
     private $descricao;
+    private $resposta; // 👈 novo atributo
     private $data_reclamacao;
     private $status_reclamacao;
 
@@ -42,6 +43,13 @@ class Reclamacao {
     }
     public function setDescricao($descricao) {
         $this->descricao = $descricao;
+    }
+
+    public function getResposta() {
+        return $this->resposta;
+    }
+    public function setResposta($resposta) {
+        $this->resposta = $resposta;
     }
 
     public function getDataReclamacao() {

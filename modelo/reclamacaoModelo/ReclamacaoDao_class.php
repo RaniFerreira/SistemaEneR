@@ -11,26 +11,28 @@ class ReclamacaoDao {
 
 
       // Cadastrar reclamação (morador ou síndico)
-    public function cadastrar(Reclamacao $r) {
-        try {
-            $sql = "INSERT INTO reclamacao 
-                    (id_morador, id_sindico, titulo, descricao, data_reclamacao, status_reclamacao)
-                    VALUES (:id_morador, :id_sindico, :titulo, :descricao, :data_reclamacao, :status_reclamacao)";
-            $stmt = $this->con->prepare($sql);
+   public function cadastrar(Reclamacao $r) {
+    try {
+        $sql = "INSERT INTO reclamacao 
+                (id_morador, id_sindico, titulo, descricao, data_reclamacao, status_reclamacao, resposta)
+                VALUES (:id_morador, :id_sindico, :titulo, :descricao, :data_reclamacao, :status_reclamacao, :resposta)";
+        $stmt = $this->con->prepare($sql);
 
-            $stmt->bindValue(":id_morador", $r->getIdMorador() ?? null, PDO::PARAM_INT);
-            $stmt->bindValue(":id_sindico", $r->getIdSindico() ?? null, PDO::PARAM_INT);
-            $stmt->bindValue(":titulo", $r->getTitulo());
-            $stmt->bindValue(":descricao", $r->getDescricao());
-            $stmt->bindValue(":data_reclamacao", $r->getDataReclamacao() ?? date("Y-m-d")); // se não setada, pega data atual
-            $stmt->bindValue(":status_reclamacao", $r->getStatusReclamacao() ?? "Pendente");
+        $stmt->bindValue(":id_morador", $r->getIdMorador() ?? null, PDO::PARAM_INT);
+        $stmt->bindValue(":id_sindico", $r->getIdSindico() ?? null, PDO::PARAM_INT);
+        $stmt->bindValue(":titulo", $r->getTitulo());
+        $stmt->bindValue(":descricao", $r->getDescricao());
+        $stmt->bindValue(":data_reclamacao", $r->getDataReclamacao() ?? date("Y-m-d"));
+        $stmt->bindValue(":status_reclamacao", $r->getStatusReclamacao() ?? "Pendente");
+        $stmt->bindValue(":resposta", "?"); // valor inicial padrão
 
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            error_log("Erro ao cadastrar reclamação: " . $e->getMessage());
-            return false;
-        }
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        error_log("Erro ao cadastrar reclamação: " . $e->getMessage());
+        return false;
     }
+}
+
 
     // Listar reclamações do morador
     public function listarPorMorador($idMorador) {
@@ -139,6 +141,16 @@ public function listarReprovadasPorSindico($idSindico) {
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+public function atualizarReclamacaoSindico($id, $titulo, $descricao, $status, $resposta) {
+    $sql = "UPDATE reclamacao 
+            SET titulo = ?, descricao = ?, status_reclamacao = ?, resposta = ?
+            WHERE id_reclamacao = ?";
+    $stmt = $this->con->prepare($sql);
+    $stmt->execute([$titulo, $descricao, $status, $resposta, $id]);
+}
+
+
 
 
 

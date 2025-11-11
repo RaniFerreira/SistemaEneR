@@ -182,12 +182,14 @@ function pagarBoleto(checkbox) {
 }
 </script>
 <!-- Inclui o CSS do modal -->
-<link rel="stylesheet" href="../visao/css/estilo_modal_boleto_informativo.css">
+
 <!-- Inclui o modal de boleto -->
 <?php include(__DIR__ . "/../visao/form_modal_boleto_informativo.php"); ?>
 
+
 <!-- Inclui o JS do modal -->
 <script src="../visao/js/modalBoletoInformativo.js"></script>
+<link rel="stylesheet" href="/sistemaEneR/visao/css/estilo_modal_boleto_informativo.css">
 
 
 
@@ -229,6 +231,7 @@ break;
                                 <th>Título</th>
                                 <th>Descrição</th>
                                 <th>Status</th>
+                                <th>Resposta</th>
                                 <th>Data</th>
                             </tr>
                         </thead>
@@ -240,6 +243,7 @@ break;
                                         <td><?= htmlspecialchars($r['titulo']) ?></td>
                                         <td><?= htmlspecialchars($r['descricao']) ?></td>
                                         <td><?= htmlspecialchars($r['status_reclamacao']) ?></td>
+                                        <td><?= htmlspecialchars($r['resposta']) ?></td>
                                         <td><?= date("d/m/Y ", strtotime($r['data_reclamacao'])) ?></td>
                                     </tr>
                                 <?php endforeach; ?>

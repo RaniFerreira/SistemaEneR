@@ -23,6 +23,13 @@ if (isset($_GET["acao"])) {
         $obj->novaReclamacaoSindico($_SESSION["id_sindico"]);
         exit;
     }
-}
 
+    // ✅ AÇÃO: Síndico respondendo / editando reclamação
+    if ($_GET["acao"] === "editarOuvidoria" && isset($_SESSION["id_sindico"])) {
+        include_once(__DIR__ . "/controle/reclamacaoControle/AtualizarReclamacao_class.php");
+        $editar = new  AtualizarReclamacaoOuvidoria();
+        $editar->AtualizarReclamacao($_SESSION["id_sindico"]);
+        exit;
+    }
+}
 ?>
