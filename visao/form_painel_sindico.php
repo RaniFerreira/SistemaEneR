@@ -177,8 +177,8 @@ $pagina = $_GET["pagina"] ?? "home";
 
             case "gerenciar_boletos":
                
-               include_once(__DIR__ . "/../controle/moradorControle/ListarMorador_class.php");
-    include_once(__DIR__ . "/../controle/boletoControle/ListarBoleto_class.php");
+            include_once(__DIR__ . "/../controle/moradorControle/ListarMorador_class.php");
+            include_once(__DIR__ . "/../controle/boletoControle/ListarBoleto_class.php");
 
     // ✅ PRIMEIRO PASSO — LISTAR MORADORES DO SÍNDICO
     if (!isset($_GET["id_morador"])) {
@@ -227,7 +227,7 @@ $pagina = $_GET["pagina"] ?? "home";
 
     <h3><i class="fa-solid fa-file-invoice-dollar"></i> Boletos do Morador #<?= $idMorador ?></h3>
 
-    <a href="?pagina=gerenciar_boletos" style="display:inline-block;margin-bottom:15px;color:#0288d1;">
+    <a href="../Morador.php?fun=listarMoradorParteBoleto" style="display:inline-block;margin-bottom:15px;color:#0288d1;">
         ⬅️ Voltar para lista de moradores
     </a>
 
@@ -363,7 +363,7 @@ $pagina = $_GET["pagina"] ?? "home";
 
     <h3><i class="fa-solid fa-bolt"></i> Consumo do Morador #<?= $idMorador ?></h3>
 
-    <a href="?pagina=consumo" style="display:inline-block;margin-bottom:15px;color:#0288d1;">
+    <a href="../Morador.php?fun=listarMoradorParteConsumo" style="display:inline-block;margin-bottom:15px;color:#0288d1;">
         ⬅️ Voltar para lista de moradores
     </a>
 

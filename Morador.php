@@ -24,6 +24,21 @@ if (isset($_GET["fun"])) {
         $obj = new AtualizarMorador();
         $obj->atualizar($_GET["id"]);
     }
+    
+    else if ($acao == "listarMoradorParteConsumo") {
+        include_once(__DIR__ . "/controle/moradorControle/listarMorador_class.php");
+         $listarMoradorObj = new ListarMorador($_SESSION["id_sindico"]);
+        $moradores = $listarMoradorObj->getMoradores();
+        header("Location: visao/form_painel_sindico.php?pagina=consumo");
+        exit;
+    }
+    else if ($acao == "listarMoradorParteBoleto") {
+        include_once(__DIR__ . "/controle/moradorControle/listarMorador_class.php");
+         $listarMoradorObj = new ListarMorador($_SESSION["id_sindico"]);
+        $moradores = $listarMoradorObj->getMoradores();
+        header("Location: visao/form_painel_sindico.php?pagina=gerenciar_boletos");
+        exit;
+    }
     else if ($acao == "excluirMorador") {
     include_once(__DIR__ . "/controle/moradorControle/ExcluirMorador_class.php");
     $obj = new ExcluirMorador();
