@@ -30,7 +30,7 @@ $pagina = $_GET["pagina"] ?? "home";
     <div>
         <div class="sidebar-header">
             <h2><i class="fa-solid fa-user-tie"></i> Ouvidoria</h2>
-            <p><?= $_SESSION["nome_usuario"] ?></p>
+            <p style="text-align:center;"><?= $_SESSION["nome_usuario"] ?></p>
         </div>
 
         <div class="menu">

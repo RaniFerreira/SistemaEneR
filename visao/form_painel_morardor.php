@@ -21,6 +21,7 @@ $pagina = $_GET["pagina"] ?? "home";
     <title>Painel do Morador</title>
     <link rel="stylesheet" href="/sistemaEneR/visao/css/estilo_painel_morador.css">
     <link rel="stylesheet" href="/sistemaEneR/visao/css/estilo_tela_confirma_pag.css">
+    <link rel="stylesheet" href="../visao/css/estilo_modal_boleto_informativo.css">
     <script src="https://kit.fontawesome.com/a2e0e9a09f.js" crossorigin="anonymous"></script>
     <script src="/sistemaEneR/visao/js/calculaConsumo.js"></script>
     <script src="/sistemaEneR/visao/js/confirmacaoPagamento.js"></script>
@@ -35,7 +36,7 @@ $pagina = $_GET["pagina"] ?? "home";
     <div>
         <div class="sidebar-header">
             <h2><i class="fa-solid fa-user"></i> Morador</h2>
-            <p><?= $_SESSION["nome_usuario"] ?></p>
+            <p style="text-align:center;"><?= $_SESSION["nome_usuario"] ?></p>
         </div>
 
         <div class="menu">
@@ -189,7 +190,6 @@ function pagarBoleto(checkbox) {
 
 <!-- Inclui o JS do modal -->
 <script src="../visao/js/modalBoletoInformativo.js"></script>
-<link rel="stylesheet" href="/sistemaEneR/visao/css/estilo_modal_boleto_informativo.css">
 
 
 

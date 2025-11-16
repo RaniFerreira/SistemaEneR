@@ -21,6 +21,7 @@ $pagina = $_GET["pagina"] ?? "home";
     <title>Painel do Síndico</title>
     <link rel="stylesheet" href="/sistemaEneR/visao/css/estilo_painel_sindico.css">
     <link rel="stylesheet" href="/sistemaEneR/visao/css/estilo_cadastro_morador.css">
+    <link rel="stylesheet" href="../visao/css/estilo_modal_boleto_informativo.css">
     <script src="https://kit.fontawesome.com/a2e0e9a09f.js" crossorigin="anonymous"></script>
     <script src="/sistemaEneR/visao/js/confirmacaoPagamento.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -37,10 +38,10 @@ $pagina = $_GET["pagina"] ?? "home";
         <div class="menu">
             <a href="?pagina=cadastrar_morador"><i class="fa-solid fa-user-plus"></i> Cadastrar Morador</a>
             <a href="?pagina=listarMoradores"><i class="fa-solid fa-user-plus"></i> Moradores</a>
-             <a href="?pagina=consumo"><i class="fa-solid fa-user-plus"></i> Gerenciar Consumos</a>
+             <a href="?pagina=consumo"><i class="fa-solid fa-bolt"></i> Gerenciar Consumos</a>
             <a href="?pagina=gerenciar_boletos"><i class="fa-solid fa-file-invoice-dollar"></i> Gerenciar Boletos</a>
             <a href="?pagina=correcao"><i class="fa-solid fa-pen-to-square"></i> Solicitar Correção</a>
-            <a href="?pagina=reclamacoes"><i class="fa-solid fa-pen-to-square"></i> Reclamações</a>
+            <a href="?pagina=reclamacoes"><i class="fa-solid fa-list-check"></i> Reclamações</a>
             <a href="?pagina=ouvidoria"><i class="fa-solid fa-list-check"></i> Ouvidoria</a>
         </div>
     </div>
@@ -299,7 +300,7 @@ $pagina = $_GET["pagina"] ?? "home";
         </table>
     </form>
     <!-- Inclui o CSS do modal -->
-    <link rel="stylesheet" href="../visao/css/estilo_modal_boleto_informativo.css">
+    
     <!-- Inclui o modal de boleto -->
     <?php include(__DIR__ . "/../visao/form_modal_boleto_informativo.php"); ?>
     <!-- Inclui o JS do modal -->
