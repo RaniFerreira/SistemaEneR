@@ -64,7 +64,7 @@ $pagina = $_GET["pagina"] ?? "home";
     // Conteúdo dinâmico da página
     switch($pagina){
         case "leitura":
-            $tarifa = 0.80; // valor da tarifa fixa
+            $tarifa = 0.99; // valor da tarifa fixa
             ?>
 
             <h3><i class='fa-solid fa-bolt'></i> Inserir Leitura de Consumo</h3>

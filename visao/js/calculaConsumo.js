@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!kwhInput || !resumo) return; // garante que os elementos existem
 
-    const tarifa = parseFloat(kwhInput.dataset.tarifa) || 0.80;
+    const tarifa = parseFloat(kwhInput.dataset.tarifa) || 0.99;
 
     const atualizarResumo = () => {
         const kwh = parseFloat(kwhInput.value) || 0;

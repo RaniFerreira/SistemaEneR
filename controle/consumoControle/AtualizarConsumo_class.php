@@ -31,7 +31,7 @@ class AtualizarConsumo {
         // =======================================================
         // 2️⃣ Atualizar apenas o valor do boleto
         // =======================================================
-        $tarifa = 0.80;
+        $tarifa = 0.99;
         $novoValor = $novoKwh * $tarifa;
 
         $daoBoleto = new BoletoDao();

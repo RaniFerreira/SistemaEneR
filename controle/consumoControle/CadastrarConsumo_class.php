@@ -28,7 +28,7 @@ class CadastrarConsumo {
 
             if (!$idConsumo) die("Erro: Não foi possível cadastrar o consumo!");
 
-            $valor = $kwh * 0.80;
+            $valor = $kwh * 0.99;
 
             $boletoCtrl = new CadastrarBoleto();
             $gerouBoleto = $boletoCtrl->gerarBoleto($idMorador, $valor, $idConsumo);
