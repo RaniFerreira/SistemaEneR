@@ -3,7 +3,7 @@ session_start();
 
 // Se não for morador e nem síndico, bloqueia
 if (!isset($_SESSION["id_morador"]) && !isset($_SESSION["id_sindico"])) {
-    header("Location: controle/Logout_class.php");
+     header("Location: ./controle/Logout_class.php");
     exit;
 }
 

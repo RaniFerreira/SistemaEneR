@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION["id_sindico"])) {
-    header("Location: controle/Logout_class.php");
+    header("Location: ./controle/Logout_class.php");
     exit;
 }
 
