@@ -55,7 +55,7 @@ $pagina = $_GET["pagina"] ?? "home";
 
 <div class="main-content">
     <header>
-        <h2><i class="fa-solid fa-house"></i> Painel do(a) Morador(a)</h2>
+        <h2><i class="fa-solid fa-house"></i> Painel do Morador</h2>
     </header>
 
     <div class="card">
