@@ -1,0 +1,63 @@
+create database sistemaener;
+use sistemaener;
+
+-- Na hora de criar as tabelas, crie uma por vez, na sequencia que está
+-- Tabelas
+CREATE TABLE usuario (
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    nome_usuario VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE sindico (
+    id_sindico INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    nome_condominio VARCHAR(100),
+    telefone VARCHAR(20),
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+CREATE TABLE morador (
+    id_morador INT PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT NOT NULL,
+    id_sindico INT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    nome_condominio VARCHAR(100),
+    telefone VARCHAR(20),
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
+    FOREIGN KEY (id_sindico) REFERENCES sindico(id_sindico)
+);
+
+CREATE TABLE reclamacao (
+    id_reclamacao INT PRIMARY KEY AUTO_INCREMENT,
+    id_morador INT NULL,
+    id_sindico INT NULL,
+    titulo VARCHAR(100) NOT NULL,
+    descricao TEXT NOT NULL,
+    data_reclamacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status_reclamacao VARCHAR(100) DEFAULT 'Pendente',
+    FOREIGN KEY (id_morador) REFERENCES morador(id_morador),
+    FOREIGN KEY (id_sindico) REFERENCES sindico(id_sindico)
+);
+
+CREATE TABLE boleto (
+    id_boleto INT PRIMARY KEY AUTO_INCREMENT,
+    id_morador INT NOT NULL,
+    id_consumo INT NOT NULL,
+    data_emissao DATE NOT NULL,
+    data_vencimento DATE NOT NULL,
+    valor DECIMAL(10,2) NOT NULL,
+    status_boleto VARCHAR(20) DEFAULT 'Pendente',
+    FOREIGN KEY (id_morador) REFERENCES morador(id_morador)
+);
+
+CREATE TABLE consumo (
+    id_consumo INT PRIMARY KEY AUTO_INCREMENT,
+    id_morador INT NOT NULL,
+    data_leitura DATE NOT NULL,
+    kwh DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_morador) REFERENCES morador(id_morador)
+);
+
