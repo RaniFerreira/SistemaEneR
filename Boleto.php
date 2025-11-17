@@ -3,7 +3,7 @@ session_start();
 
 // ✅ BLOQUEIA visitantes
 if (!isset($_SESSION["id_morador"]) && !isset($_SESSION["id_sindico"])) {
-    header("Location: visao/index.php");
+    header("Location: controle/Logout_class.php");
     exit;
 }
 

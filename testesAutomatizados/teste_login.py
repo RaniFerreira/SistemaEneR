@@ -18,8 +18,8 @@ email = driver.find_element(By.NAME, "email")
 senha = driver.find_element(By.NAME, "senha")
 
 # Digita as credenciais de teste (ajuste conforme seu banco)
-email.send_keys("riquinho@gmail.com")
-senha.send_keys("12")
+email.send_keys("dilermando03@gmail.com")
+senha.send_keys("rani123")
 
 # Envia o formulário
 senha.send_keys(Keys.RETURN)

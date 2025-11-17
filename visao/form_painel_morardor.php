@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Verifica se usuário está logado
 if (!isset($_SESSION["id_morador"])) {
-    header("Location: index.php");
+    header("Location: controle/Logout_class.php");
     exit;
 }
 
