@@ -35,7 +35,8 @@ class CadastrarConsumo {
 
             if (!$gerouBoleto) die("Erro: Não foi possível gerar o boleto!");
 
-            header("Location: visao/form_painel_morardor.php?pagina=leitura");
+            header("Location: visao/form_painel_morardor.php?pagina=leitura&status=sucesso");
+
             exit;
         }
     }

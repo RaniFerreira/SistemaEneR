@@ -27,8 +27,8 @@ class CadastrarReclamacao {
             $dao = new ReclamacaoDao();
             $dao->cadastrar($r);
 
-            // Redireciona de volta para o painel do morador
-            header("Location: visao/form_painel_morardor.php?pagina=correcao");
+              // 🔹 Agora com status
+        header("Location: visao/form_painel_morardor.php?pagina=correcao&status=sucesso");
             exit;
         }
     }
@@ -55,7 +55,10 @@ class CadastrarReclamacao {
             $dao = new ReclamacaoDao();
             $dao->cadastrar($r);
 
-            header("Location: visao/form_painel_sindico.php?pagina=correcao");
+           // 🔹 Agora com status
+        header("Location: visao/form_painel_sindico.php?pagina=correcao&status=sucesso");
+
+
             exit;
         }
     }

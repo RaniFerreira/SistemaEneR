@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Verifica se usuário está logado
 if (!isset($_SESSION["id_morador"])) {
-    header("Location: ./controle/Logout_class.php");
+    header("Location: ../controle/Logout_class.php");
     exit;
 }
 
@@ -68,9 +68,24 @@ $pagina = $_GET["pagina"] ?? "home";
             ?>
 
             <h3><i class='fa-solid fa-bolt'></i> Inserir Leitura de Consumo</h3>
-            <?php if (isset($status)) { ?>
-           
-        <?php } ?>
+            <?php if (isset($_GET['status']) && $_GET['status'] === 'sucesso') { ?>
+    <div id="msgSucesso" style="color: blue; font-weight: bold; margin-top: 10px;">
+        <i class="fa-solid fa-check-circle"></i> Consumo registrado com sucesso!
+    </div>
+<?php } ?>
+
+           <script>
+    setTimeout(function() {
+        var msg = document.getElementById("msgSucesso");
+        if (msg) {
+            msg.style.transition = "opacity 0.5s ease";
+            msg.style.opacity = "0";
+
+            setTimeout(() => msg.remove(), 500); // Remove após o efeito fade
+        }
+    }, 5000); // 5000ms = 5 segundos
+</script>
+
 
             <form   action="../Consumo.php?acao=novaLeitura"  method="POST">
                 <label for='kwh'>kWh consumidos:</label>
@@ -199,7 +214,37 @@ break;
 
       case "correcao":
         ?>
+       
+            <!-- Mensagem -->
+        <div style="flex: 1; background: #e6f0ff; border-left: 4px solid blue; padding: 10px; border-radius: 5px;">
+            <strong><i class="fa-solid fa-circle-info"></i> Atenção</strong>
+            <p style="margin-top: 5px;">
+                Detalhe ao máximo sua solicitação, informando o motivo, e o que precisa ser ajustado. <br><br>
+                <b>Se a correção for de boleto</b>, na descrição passe o <b>ID do boleto</b>, a <b>data</b> e o <b>valor antigo</b> e quais serão as novas possiveis atualizações.
+            </p>
+        </div>
             <h3><i class='fa-solid fa-pen-to-square'></i> Solicitar Correção</h3>
+             <!-- Mensagem de sucesso (aparece só se ?status=sucesso estiver presente) -->
+    <?php if (isset($_GET['status']) && $_GET['status'] === 'sucesso'): ?>
+        <div id="msgSucesso" style="color: blue; font-weight: bold; margin-bottom: 10px;">
+            <i class="fa-solid fa-check-circle"></i> Solicitação enviada com sucesso!
+        </div>
+        <script>
+        (function(){
+            var msg = document.getElementById('msgSucesso');
+            if (!msg) return;
+            // garante opacidade inicial 1
+            msg.style.opacity = '1';
+            // após 5s, faz fade e remove
+            setTimeout(function(){
+                msg.style.transition = 'opacity 0.5s ease';
+                msg.style.opacity = '0';
+                setTimeout(function(){ if (msg && msg.parentNode) msg.parentNode.removeChild(msg); }, 500);
+            }, 5000);
+        })();
+        </script>
+    <?php endif; ?>
+
             <form action='../Reclamacao.php?acao=novaReclamacaoMorador' method='POST'>
                 <label>Título:</label>
                 <input type='text' name='titulo' required>
@@ -211,6 +256,8 @@ break;
                     <i class='fa-solid fa-paper-plane'></i> Enviar Solicitação
                 </button>
             </form>
+
+        
         <?php
 break;
 

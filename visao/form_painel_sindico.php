@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Verifica se síndico está logado
 if (!isset($_SESSION["id_sindico"])) {
-     header("Location: ./controle/Logout_class.php");
+     header("Location: ../controle/Logout_class.php");
     exit;
 }
 
@@ -243,6 +243,7 @@ $pagina = $_GET["pagina"] ?? "home";
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>consumo</th>
                     <th>Data Emissão</th>
                     <th>Data Vencimento</th>
                     <th>Valor</th>
@@ -264,6 +265,7 @@ $pagina = $_GET["pagina"] ?? "home";
                     ?>
                 <tr>
                     <td><?= $b['id_boleto'] ?></td>
+                    <td><?= $b['id_consumo'] ?></td>
                     <td><?= date("d/m/Y", strtotime($b['data_emissao'])) ?></td>
                     <td><?= date("d/m/Y", strtotime($b['data_vencimento'])) ?></td>
                     <td><?= number_format($b['valor'], 2, ',', '.') ?></td>
@@ -440,9 +442,39 @@ $pagina = $_GET["pagina"] ?? "home";
 
 
             case "correcao":
+
+                
               
                 ?>
-                <h3><i class='fa-solid fa-pen-to-square'></i> Solicitar Correção</h3>
+                  <!-- Mensagem -->
+        <div style="flex: 1; background: #e6f0ff; border-left: 4px solid blue; padding: 10px; border-radius: 5px;">
+            <strong><i class="fa-solid fa-circle-info"></i> Atenção</strong>
+            <p style="margin-top: 5px;">
+                Detalhe ao máximo sua solicitação, informando o motivo, e o que precisa ser ajustado. <br><br>
+                <b>Se a correção for de boleto</b>, na descrição passe o <b>ID do boleto</b>, a <b>data</b> e o <b>valor antigo</b> e quais serão as novas possiveis atualizações.
+            </p>
+        </div>
+            <h3><i class='fa-solid fa-pen-to-square'></i> Solicitar Correção</h3>
+             <!-- Mensagem de sucesso (aparece só se ?status=sucesso estiver presente) -->
+    <?php if (isset($_GET['status']) && $_GET['status'] === 'sucesso'): ?>
+        <div id="msgSucesso" style="color: blue; font-weight: bold; margin-bottom: 10px;">
+            <i class="fa-solid fa-check-circle"></i> Solicitação enviada com sucesso!
+        </div>
+        <script>
+        (function(){
+            var msg = document.getElementById('msgSucesso');
+            if (!msg) return;
+            // garante opacidade inicial 1
+            msg.style.opacity = '1';
+            // após 5s, faz fade e remove
+            setTimeout(function(){
+                msg.style.transition = 'opacity 0.5s ease';
+                msg.style.opacity = '0';
+                setTimeout(function(){ if (msg && msg.parentNode) msg.parentNode.removeChild(msg); }, 500);
+            }, 5000);
+        })();
+        </script>
+    <?php endif; ?>
                     <form action="../Reclamacao.php?acao=novaReclamacaoSindico" method="POST">
                         
                         <label>Título:</label>

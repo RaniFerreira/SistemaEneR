@@ -3,7 +3,7 @@ session_start(); // inicia a sessão
 
 // verifica se o síndico está logado
 if (!isset($_SESSION["id_sindico"])) {
-     header("Location: ./controle/Logout_class.php");
+     header("Location: ../controle/Logout_class.php");
     exit;
 }
 

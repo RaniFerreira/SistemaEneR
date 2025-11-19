@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION["id_sindico"])) {
-    header("Location: ./controle/Logout_class.php");
+    header("Location: ../controle/Logout_class.php");
     exit;
 }
 
@@ -235,7 +235,7 @@ $reclamacoes = $list->getReclamacoes();
                         if ($desc === '') {
                             echo "<i>—</i>";
                         } else {
-                            $max = 100;
+                            $max = 150;
                             if (mb_strlen($desc) > $max) {
                                 echo htmlspecialchars(mb_substr($desc, 0, $max)) . '…';
                             } else {
