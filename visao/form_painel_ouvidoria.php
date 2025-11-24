@@ -207,6 +207,7 @@ $reclamacoes = $list->getReclamacoes();
                 <th>Título</th>
                 <th>Morador</th>
                 <th>Status</th>
+                <th>Motivo</th>
                 <th>Data</th>
                 <th>Descrição</th>
             </tr>
@@ -226,6 +227,21 @@ $reclamacoes = $list->getReclamacoes();
                 <td><?= $r['nome_morador'] ?: "<i>Interna</i>" ?></td>
 
                 <td><span class="status-badge aprovado"><?= htmlspecialchars($r['status_reclamacao']) ?></span></td>
+                <td title="<?= htmlspecialchars($r['resposta']) ?>">
+                    <?php
+                        $desc = trim($r['resposta'] ?? '');
+                        if ($desc === '') {
+                            echo "<i>—</i>";
+                        } else {
+                            $max = 150;
+                            if (mb_strlen($desc) > $max) {
+                                echo htmlspecialchars(mb_substr($desc, 0, $max)) . '…';
+                            } else {
+                                echo htmlspecialchars($desc);
+                            }
+                        }
+                    ?>
+                </td>
 
                 <td><?= date("d/m/Y H:i", strtotime($r['data_reclamacao'])) ?></td>
 
@@ -274,6 +290,7 @@ $reclamacoes = $list->getReclamacoes();
                 <th>Título</th>
                 <th>Morador</th>
                 <th>Status</th>
+                <th>Motivo</th>
                 <th>Data</th>
                 <th>Descrição</th>
             </tr>
@@ -293,6 +310,21 @@ $reclamacoes = $list->getReclamacoes();
                 <td><?= $r['nome_morador'] ?: "<i>Interna</i>" ?></td>
 
                 <td><span class="status-badge reprovada"><?= htmlspecialchars($r['status_reclamacao']) ?></span></td>
+                <td title="<?= htmlspecialchars($r['resposta']) ?>">
+                    <?php
+                        $desc = trim($r['resposta'] ?? '');
+                        if ($desc === '') {
+                            echo "<i>—</i>";
+                        } else {
+                            $max = 150;
+                            if (mb_strlen($desc) > $max) {
+                                echo htmlspecialchars(mb_substr($desc, 0, $max)) . '…';
+                            } else {
+                                echo htmlspecialchars($desc);
+                            }
+                        }
+                    ?>
+                </td>
 
                 <td><?= date("d/m/Y H:i", strtotime($r['data_reclamacao'])) ?></td>
 

@@ -95,6 +95,7 @@ public function listarAprovadasPorSindico($idSindico) {
             r.titulo,
             r.descricao,
             r.status_reclamacao,
+            r.resposta,
             r.data_reclamacao,
             m.nome AS nome_morador
         FROM reclamacao r
@@ -122,6 +123,7 @@ public function listarReprovadasPorSindico($idSindico) {
             r.titulo,
             r.descricao,
             r.status_reclamacao,
+            r.resposta,
             r.data_reclamacao,
             m.nome AS nome_morador
         FROM reclamacao r
